@@ -14,6 +14,12 @@ import torch.backends.cudnn as cudnn
 # 启用cudnn基准测试
 cudnn.benchmark = True
 
+
+
+# 确保 PyTorch 使用正确的设备
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+
 def train_fn(disc, gen, loader, opt_disc, opt_gen, l1, bce, g_scaler, d_scaler):
     loop = tqdm(loader, leave = True)
 
@@ -64,7 +70,7 @@ def main():
         load_checkpoint(config.CHECKPOINT_GEN, gen, opt_gen, config.LEARNING_RATE)
         load_checkpoint(config.CHECKPOINT_DISC, disc, opt_disc, config.LEARNING_RATE)
         
-    train_dataset = MapDataset(root_dir = "data/maps/maps/train")
+    train_dataset = MapDataset(root_dir = "snap/snapd-desktop-integration/253/Documents/P2PSct/data_all/maps/train")
     train_loader = DataLoader(
         dataset = train_dataset, 
         batch_size = config.BATCH_SIZE, 
@@ -77,7 +83,7 @@ def main():
     g_scaler = torch.amp.GradScaler('cuda')
     d_scaler = torch.amp.GradScaler('cuda')
     
-    val_dataset = MapDataset(root_dir = "data/maps/maps/val")
+    val_dataset = MapDataset(root_dir = "snap/snapd-desktop-integration/253/Documents/P2PSct/data_all/maps/val")
     val_loader = DataLoader(
         dataset = val_dataset, 
         batch_size = 1, 
@@ -92,8 +98,7 @@ def main():
         if config.SAVE_MODEL and epoch % 50 == 0:
             save_checkpoint(gen, opt_gen, filename = config.CHECKPOINT_GEN)
             save_checkpoint(disc, opt_disc, filename = config.CHECKPOINT_DISC)
-
-        save_some_examples(gen, val_loader, epoch, folder = "evaluation")
+            save_some_examples(gen, val_loader, epoch, folder = "evaluation")
     
 
 if __name__ == "__main__":

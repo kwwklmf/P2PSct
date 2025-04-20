@@ -2,15 +2,16 @@ import torch
 import albumentations as A
 from albumentations.pytorch import ToTensorV2
 import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "6"
 
 # 禁用albumentations的版本检查
 os.environ['ALBUMENTATIONS_DISABLE_VERSION_CHECK'] = '1'
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-TRAIN_DIR = "data/maps/maps/train"
-VAL_DIR = "data/maps/maps/val"
+TRAIN_DIR = "snap/snapd-desktop-integration/253/Documents/P2PSct/data_all/maps/train"
+VAL_DIR = "snap/snapd-desktop-integration/253/Documents/P2PSct/data_all/maps/val"
 LEARNING_RATE = 2e-4
-BATCH_SIZE = 32
+BATCH_SIZE = 256
 NUM_WORKERS = 4
 IMAGE_SIZE = 256
 CHANNELS_IMG = 3
